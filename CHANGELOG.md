@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial scaffolding.
 - Stats primitives: Wilson-score confidence interval, linear-interpolated percentile, idle-time histogram buckets. Stdlib-only.
 - Keyspace sampler: `SCAN` + pipelined `TYPE` / `MEMORY USAGE` / `OBJECT IDLETIME` / `TTL` per key, aggregation into a `SampleStats` dataclass. Handles cluster mode, LFU-policy idle errors, vanished keys, non-UTF-8 keys, and bounded top-N tracking.
 - Projection: turns a `SampleStats` into a `Projection` with Wilson CI on the cold fraction, scaled byte projections, and a RAM-saving range. Declines cleanly under pure LFU.
