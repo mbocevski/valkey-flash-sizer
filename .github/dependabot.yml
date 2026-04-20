@@ -1,0 +1,27 @@
+version: 2
+updates:
+  # GitHub Actions — update pinned SHA references weekly. Pairs with our
+  # convention of pinning every action to a full commit SHA with the
+  # human-readable version as a trailing comment.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+
+  # Python deps (pyproject.toml + uv.lock). Groups minor/patch bumps so
+  # weekly PRs stay tractable.
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    labels:
+      - dependencies
