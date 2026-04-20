@@ -70,3 +70,6 @@ quote-style = "double"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "integration: test that requires a running Valkey server (set VALKEY_URL)",
+]

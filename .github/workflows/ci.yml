@@ -57,4 +57,16 @@ jobs:
       - name: pytest (integration)
         env:
           VALKEY_URL: valkey://127.0.0.1:6379
-        run: uv run pytest -q -m integration
+        # Exit code 5 from pytest means "no tests collected", which is the
+        # expected state until the integration test file lands. Treat as
+        # success so the job stays green while the suite is being built
+        # up. Any real failure (1, 2, 3, 4) still fails the job.
+        run: |
+          set +e
+          uv run pytest -q -m integration
+          rc=$?
+          if [ $rc -eq 5 ]; then
+            echo "no integration tests collected yet — treating as pass"
+            exit 0
+          fi
+          exit $rc
