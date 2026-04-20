@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-04-20
+
+### Fixed
+
+- `uvx valkey-flash-sizer …` errored with *"an executable named `valkey-flash-sizer` is not provided by package `valkey-flash-sizer`"*. `uvx <package>` dispatches to an executable matching the package name, but v0.1.0 only registered `flash-sizer` in `[project.scripts]`. Added `valkey-flash-sizer` as an alias entry point; both names now invoke the same CLI. Fixes the README's primary usage example.
+
 ## [0.1.0] - 2026-04-20
 
 First release.
@@ -22,5 +28,6 @@ First release.
 - PyPI release workflow with OIDC trusted publishing. Tag a `v*.*.*`, workflow builds sdist + wheel, verifies the tag matches `pyproject.toml` version, publishes without any API token on either side.
 - Dependabot configuration matching the sibling `valkey-flash` repo: weekly SHA bumps for GitHub Actions, grouped minor/patch bumps for Python deps via the `uv` ecosystem.
 
-[Unreleased]: https://github.com/mbocevski/valkey-flash-sizer/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/mbocevski/valkey-flash-sizer/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/mbocevski/valkey-flash-sizer/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/mbocevski/valkey-flash-sizer/releases/tag/v0.1.0

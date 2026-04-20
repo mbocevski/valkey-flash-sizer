@@ -1,6 +1,6 @@
 [project]
 name = "valkey-flash-sizer"
-version = "0.1.0"
+version = "0.1.1"
 description = "Read-only analyzer that samples a Valkey keyspace and projects the RAM savings from tiering cold entries to NVMe via valkey-flash."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -27,6 +27,14 @@ dependencies = [
 ]
 
 [project.scripts]
+# Two names for the same entry point:
+#   - `valkey-flash-sizer` matches the PyPI package name, which is what
+#     `uvx <package>` dispatches to by default. Without this alias,
+#     `uvx valkey-flash-sizer …` errors with "an executable named
+#     `valkey-flash-sizer` is not provided by package `valkey-flash-sizer`".
+#   - `flash-sizer` is the short form for interactive use once the
+#     package is persistently installed via pipx.
+valkey-flash-sizer = "flash_sizer.main:main"
 flash-sizer = "flash_sizer.main:main"
 
 [project.urls]
