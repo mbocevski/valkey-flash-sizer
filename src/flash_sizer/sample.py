@@ -104,6 +104,13 @@ class SampleStats:
     tierable_cold_count: int = 0
     tierable_cold_bytes: int = 0
 
+    # Tierable keys with a known idle value — the honest denominator for
+    # the cold-fraction Wilson CI. Equal to `tierable_count` when every
+    # probe reported an idle value (LRU-family policy); smaller when some
+    # probes hit the LFU-mode `OBJECT IDLETIME` error.
+    tierable_with_idle_count: int = 0
+    tierable_with_idle_bytes: int = 0
+
     # Retained for percentile computation at report time. Keyed by the
     # tierable type so we can surface "string p99 = 4.2 KB, hash p99 = …".
     type_sizes: dict[str, list[int]] = field(default_factory=dict)
@@ -373,6 +380,9 @@ def _record(
         bucket = idle_bucket(float(probe.idle_seconds))
         stats.idle_counts[bucket] = stats.idle_counts.get(bucket, 0) + 1
         stats.idle_bytes[bucket] = stats.idle_bytes.get(bucket, 0) + probe.size_bytes
-        if is_tierable and probe.idle_seconds >= cold_threshold_seconds:
-            stats.tierable_cold_count += 1
-            stats.tierable_cold_bytes += probe.size_bytes
+        if is_tierable:
+            stats.tierable_with_idle_count += 1
+            stats.tierable_with_idle_bytes += probe.size_bytes
+            if probe.idle_seconds >= cold_threshold_seconds:
+                stats.tierable_cold_count += 1
+                stats.tierable_cold_bytes += probe.size_bytes
