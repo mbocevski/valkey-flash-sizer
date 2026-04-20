@@ -10,11 +10,36 @@ The tool never mutates state — it only issues `SCAN`, `MEMORY USAGE`, `OBJECT 
 
 ## Status
 
-Pre-release. Not yet on PyPI. Install from source:
+Pre-release. Not yet on PyPI. Run from the repo:
 
 ```
 uvx --from git+https://github.com/mbocevski/valkey-flash-sizer flash-sizer valkey://my-host:6379
 ```
+
+## Usage
+
+```
+flash-sizer [OPTIONS] URL
+
+  URL                Valkey URL (valkey://, valkeys://, redis://, rediss://, unix://)
+
+  --sample N                   Keys to sample (default 100000)
+  --cold-threshold DURATION    Idle cutoff for "cold" (default 30m; accepts 30s/15m/2h/1d)
+  --hot-cache-ratio F          Assumed hot-cache fraction on the flash tier (default 0.05)
+  --confidence LEVEL           Wilson CI level (0.80 / 0.90 / 0.95 / 0.99, default 0.95)
+  --format markdown|json       Report format (default markdown)
+  --output FILE                Write report to file instead of stdout
+  --tls                        Use TLS (shortcut for valkeys:// scheme)
+  --username U --password P    AUTH credentials
+  --timeout SECONDS            Per-command socket timeout (default 10)
+  --pipeline-size N            Probes per round-trip (default 200)
+```
+
+Cluster mode is auto-detected — point the tool at any primary.
+
+## Example output
+
+The report (Markdown by default) leads with a headline — projected RAM saving with a 95 % confidence interval — and then walks through the sampling fraction, the idle-time distribution, per-type value-size percentiles, the largest sampled keys, and an explicit "Known biases" section. See `tests/golden/report.md` for a complete example rendered from a fixture.
 
 ## What it does
 
