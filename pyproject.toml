@@ -56,6 +56,12 @@ line-length = 100
 select = ["E", "F", "I", "W", "B", "UP", "SIM", "PL"]
 ignore = []
 
+[tool.ruff.lint.pylint]
+# Keyword-only APIs with a handful of tuning knobs are fine; the default
+# cap of 5 is aimed at positional-arg sprawl. Sampler / projection / CLI
+# entry points commonly land around 6–8.
+max-args = 8
+
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["PLR0913", "PLR2004", "PLR0912", "PLR0915", "E501"]
 
@@ -64,3 +70,6 @@ quote-style = "double"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "integration: test that requires a running Valkey server (set VALKEY_URL)",
+]
